@@ -2,91 +2,94 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct {
-    int n_clientes;
-    int n_recursos;
-    int *disponivel;
-    int **maximo;
-    int **alocado;
-    int **necessidade;
-} Banqueiro;
+int n_clientes = 0;
+int n_recursos = 0;
+int *disponivel = NULL;
+int **maximo = NULL;
+int **alocado = NULL;
+int **necessidade = NULL;
 
-void alocar_sistema(Banqueiro *b, int clientes, int recursos) {
-    b->n_clientes = clientes;
-    b->n_recursos = recursos;
+void alocar_matrizes() {
+    disponivel = calloc(n_recursos, sizeof(int));
+    maximo = malloc(n_clientes * sizeof(int *));
+    alocado = malloc(n_clientes * sizeof(int *));
+    necessidade = malloc(n_clientes * sizeof(int *));
 
-    b->disponivel = calloc(recursos, sizeof(int));
-    b->maximo = malloc(clientes * sizeof(int *));
-    b->alocado = malloc(clientes * sizeof(int *));
-    b->necessidade = malloc(clientes * sizeof(int *));
-
-    for (int i = 0; i < clientes; i++) {
-        b->maximo[i] = calloc(recursos, sizeof(int));
-        b->alocado[i] = calloc(recursos, sizeof(int));
-        b->necessidade[i] = calloc(recursos, sizeof(int));
+    for (int i = 0; i < n_clientes; i++) {
+        maximo[i] = calloc(n_recursos, sizeof(int));
+        alocado[i] = calloc(n_recursos, sizeof(int));
+        necessidade[i] = calloc(n_recursos, sizeof(int));
     }
 }
 
-void liberar_sistema(Banqueiro *b) {
-    for (int i = 0; i < b->n_clientes; i++) {
-        free(b->maximo[i]);
-        free(b->alocado[i]);
-        free(b->necessidade[i]);
+void liberar_matrizes() {
+    for (int i = 0; i < n_clientes; i++) {
+        free(maximo[i]);
+        free(alocado[i]);
+        free(necessidade[i]);
     }
-    free(b->maximo);
-    free(b->alocado);
-    free(b->necessidade);
-    free(b->disponivel);
+    free(maximo);
+    free(alocado);
+    free(necessidade);
+    free(disponivel);
 }
 
-int ler_clientes(Banqueiro *b, const char *arquivo) {
-    FILE *fp = fopen(arquivo, "r");
+int eh_vazia(char *linha) {
+    for (int i = 0; linha[i] != '\0'; i++) {
+        if (linha[i] != ' ' && linha[i] != '\t' && linha[i] != '\n' && linha[i] != '\r') {
+            return 0;
+        }
+    }
+    return 1;
+}
+int ler_customer() {
+    FILE *fp = fopen("customer.txt", "r");
     if (!fp) {
-        fprintf(stderr, "Erro ao abrir %s\n", arquivo);
+        fprintf(stderr, "Erro ao abrir customer.txt\n");
         return 0;
     }
 
     char linha[512];
-    int total_linhas = 0;
-
     while (fgets(linha, sizeof(linha), fp)) {
-        if (strspn(linha, " \t\r\n") != strlen(linha)) {
-            total_linhas++;
+        if (!eh_vazia(linha)) {
+            n_clientes++;
         }
     }
 
-    if (total_linhas == 0) {
-        fprintf(stderr, "Arquivo %s vazio.\n", arquivo);
+    if (n_clientes == 0) {
+        fprintf(stderr, "Arquivo customer.txt vazio\n");
         fclose(fp);
         return 0;
     }
 
-    alocar_sistema(b, total_linhas, b->n_recursos);
+    alocar_matrizes();
     rewind(fp);
 
     int i = 0;
     while (fgets(linha, sizeof(linha), fp)) {
-        if (strspn(linha, " \t\r\n") == strlen(linha)) continue;
+        if (eh_vazia(linha)) continue;
 
         int j = 0;
-        char *pedaco = strtok(linha, ",");
-        while (pedaco != NULL) {
+        char *token = strtok(linha, ",");
+        while (token != NULL) {
             int val;
-            char lixo;
-            if (j >= b->n_recursos || sscanf(pedaco, " %d %c", &val, &lixo) != 1 || val < 0) {
-                fprintf(stderr, "Erro de formatacao em %s\n", arquivo);
+            char extra;
+            if (j >= n_recursos || sscanf(token, " %d %c", &val, &extra) != 1 || val < 0) {
+                fprintf(stderr, "Erro de formatacao em customer.txt\n");
                 fclose(fp);
+                liberar_matrizes();
                 return 0;
             }
-            b->maximo[i][j] = val;
-            b->necessidade[i][j] = val;
+            maximo[i][j] = val;
+            necessidade[i][j] = val;
             j++;
-            pedaco = strtok(NULL, ",");
+            token = strtok(NULL, ",");
         }
 
-        if (j != b->n_recursos) {
-            fprintf(stderr, "Quantidade incorreta de recursos em %s\n", arquivo);
+        if (j != n_recursos) {
+            fprintf(stderr, "Quantidade de recursos invalida em customer.txt\n");
             fclose(fp);
+            liberar_matrizes();
             return 0;
         }
         i++;
@@ -102,22 +105,21 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    Banqueiro b;
-    b.n_recursos = argc - 1;
+    n_recursos = argc - 1;
 
-    if (!ler_clientes(&b, "customer.txt")) {
+    if (!ler_customer()) {
         return 1;
     }
 
-    for (int j = 0; j < b.n_recursos; j++) {
-        char lixo;
-        if (sscanf(argv[j + 1], " %d %c", &b.disponivel[j], &lixo) != 1 || b.disponivel[j] < 0) {
+    for (int j = 0; j < n_recursos; j++) {
+        char extra;
+        if (sscanf(argv[j + 1], " %d %c", &disponivel[j], &extra) != 1 || disponivel[j] < 0) {
             fprintf(stderr, "Argumento invalido: %s\n", argv[j + 1]);
-            liberar_sistema(&b);
+            liberar_matrizes();
             return 1;
         }
     }
-    printf("OK! %d clientes e %d recursos carregados.\n", b.n_clientes, b.n_recursos);
-    liberar_sistema(&b);
+    printf("OK! %d clientes e %d recursos carregados.\n", n_clientes, n_recursos);
+    liberar_matrizes();
     return 0;
 }
