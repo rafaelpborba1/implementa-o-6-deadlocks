@@ -157,27 +157,33 @@ void formatar_vetor(int *vet, char *destino) {
     }
 }
 
-void imprimir_estado() {
+void imprimir_estado(FILE *saida) {
+    fprintf(saida, "MAXIMUM   |   ALLOCATION  |   NEED\n");
     printf("MAXIMUM   |   ALLOCATION  |   NEED\n");
+
     char str_max[256], str_aloc[256], str_nec[256], str_disp[256];
 
     for (int c = 0; c < total_clientes; c++) {
         formatar_vetor(maximo[c], str_max);
         formatar_vetor(alocado[c], str_aloc);
         formatar_vetor(necessidade[c], str_nec);
+
+        fprintf(saida, "%-10s|   %-12s|   %s \n", str_max, str_aloc, str_nec);
         printf("%-10s|   %-12s|   %s \n", str_max, str_aloc, str_nec);
     }
 
     formatar_vetor(disponivel, str_disp);
+    fprintf(saida, "AVAILABLE %s \n", str_disp);
     printf("AVAILABLE %s \n", str_disp);
 }
 
-void tratar_request(int cliente, int *pedido) {
+void tratar_request(int cliente, int *pedido, FILE *saida) {
     char str_pedido[256], str_disp[256];
     formatar_vetor(pedido, str_pedido);
 
     for (int r = 0; r < total_recursos; r++) {
         if (pedido[r] > necessidade[cliente][r]) {
+            fprintf(saida, "The customer %d request %s was denied because exceed its maximum allocation\n", cliente, str_pedido);
             printf("The customer %d request %s was denied because exceed its maximum allocation\n", cliente, str_pedido);
             return;
         }
@@ -186,6 +192,7 @@ void tratar_request(int cliente, int *pedido) {
     for (int r = 0; r < total_recursos; r++) {
         if (pedido[r] > disponivel[r]) {
             formatar_vetor(disponivel, str_disp);
+            fprintf(saida, "The resources %s are not enough to customer %d request %s \n", str_disp, cliente, str_pedido);
             printf("The resources %s are not enough to customer %d request %s \n", str_disp, cliente, str_pedido);
             return;
         }
@@ -198,6 +205,7 @@ void tratar_request(int cliente, int *pedido) {
     }
 
     if (verificar_seguranca()) {
+        fprintf(saida, "Allocate to customer %d the resources %s\n", cliente, str_pedido);
         printf("Allocate to customer %d the resources %s\n", cliente, str_pedido);
     } else {
         for (int r = 0; r < total_recursos; r++) {
@@ -205,16 +213,18 @@ void tratar_request(int cliente, int *pedido) {
             alocado[cliente][r] -= pedido[r];
             necessidade[cliente][r] += pedido[r];
         }
+        fprintf(saida, "The customer %d request %s was denied because result in an unsafe state\n", cliente, str_pedido);
         printf("The customer %d request %s was denied because result in an unsafe state\n", cliente, str_pedido);
     }
 }
 
-void tratar_release(int cliente, int *libera) {
+void tratar_release(int cliente, int *libera, FILE *saida) {
     char str_libera[256];
     formatar_vetor(libera, str_libera);
 
     for (int r = 0; r < total_recursos; r++) {
         if (libera[r] > alocado[cliente][r]) {
+            fprintf(saida, "The customer %d cannot release %s because exceed its allocation\n", cliente, str_libera);
             printf("The customer %d cannot release %s because exceed its allocation\n", cliente, str_libera);
             return;
         }
@@ -226,7 +236,51 @@ void tratar_release(int cliente, int *libera) {
         necessidade[cliente][r] += libera[r];
     }
 
+    fprintf(saida, "Release from customer %d the resources %s\n", cliente, str_libera);
     printf("Release from customer %d the resources %s\n", cliente, str_libera);
+}
+
+int processar_comandos() {
+    FILE *arq = fopen("commands.txt", "r");
+    if (!arq) {
+        fprintf(stderr, "Erro ao abrir commands.txt\n");
+        return 0;
+    }
+
+    FILE *saida = fopen("result.txt", "w");
+    if (!saida) {
+        fprintf(stderr, "Erro ao criar result.txt\n");
+        fclose(arq);
+        return 0;
+    }
+
+    int *valores = malloc(total_recursos * sizeof(int));
+    char linha[512];
+
+    while (fgets(linha, sizeof(linha), arq)) {
+        char *op = strtok(linha, " \t\r\n");
+        if (!op) continue;
+
+        if (strcmp(op, "*") == 0) {
+            imprimir_estado(saida);
+        } else if (strcmp(op, "RQ") == 0 || strcmp(op, "RL") == 0) {
+            int cliente = atoi(strtok(NULL, " \t\r\n"));
+            for (int r = 0; r < total_recursos; r++) {
+                valores[r] = atoi(strtok(NULL, " \t\r\n"));
+            }
+
+            if (strcmp(op, "RQ") == 0) {
+                tratar_request(cliente, valores, saida);
+            } else {
+                tratar_release(cliente, valores, saida);
+            }
+        }
+    }
+
+    free(valores);
+    fclose(arq);
+    fclose(saida);
+    return 1;
 }
 
 int main(int argc, char *argv[]) {
@@ -250,7 +304,11 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    imprimir_estado();
+    if (!processar_comandos()) {
+        limpar_tudo();
+        return 1;
+    }
+
     limpar_tudo();
     return 0;
 }
