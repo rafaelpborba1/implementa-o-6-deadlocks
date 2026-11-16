@@ -145,6 +145,90 @@ int verificar_seguranca() {
     return seguro;
 }
 
+void formatar_vetor(int *vet, char *destino) {
+    destino[0] = '\0';
+    char temp[32];
+    for (int r = 0; r < total_recursos; r++) {
+        sprintf(temp, "%d", vet[r]);
+        strcat(destino, temp);
+        if (r < total_recursos - 1) {
+            strcat(destino, " ");
+        }
+    }
+}
+
+void imprimir_estado() {
+    printf("MAXIMUM   |   ALLOCATION  |   NEED\n");
+    char str_max[256], str_aloc[256], str_nec[256], str_disp[256];
+
+    for (int c = 0; c < total_clientes; c++) {
+        formatar_vetor(maximo[c], str_max);
+        formatar_vetor(alocado[c], str_aloc);
+        formatar_vetor(necessidade[c], str_nec);
+        printf("%-10s|   %-12s|   %s \n", str_max, str_aloc, str_nec);
+    }
+
+    formatar_vetor(disponivel, str_disp);
+    printf("AVAILABLE %s \n", str_disp);
+}
+
+void tratar_request(int cliente, int *pedido) {
+    char str_pedido[256], str_disp[256];
+    formatar_vetor(pedido, str_pedido);
+
+    for (int r = 0; r < total_recursos; r++) {
+        if (pedido[r] > necessidade[cliente][r]) {
+            printf("The customer %d request %s was denied because exceed its maximum allocation\n", cliente, str_pedido);
+            return;
+        }
+    }
+
+    for (int r = 0; r < total_recursos; r++) {
+        if (pedido[r] > disponivel[r]) {
+            formatar_vetor(disponivel, str_disp);
+            printf("The resources %s are not enough to customer %d request %s \n", str_disp, cliente, str_pedido);
+            return;
+        }
+    }
+
+    for (int r = 0; r < total_recursos; r++) {
+        disponivel[r] -= pedido[r];
+        alocado[cliente][r] += pedido[r];
+        necessidade[cliente][r] -= pedido[r];
+    }
+
+    if (verificar_seguranca()) {
+        printf("Allocate to customer %d the resources %s\n", cliente, str_pedido);
+    } else {
+        for (int r = 0; r < total_recursos; r++) {
+            disponivel[r] += pedido[r];
+            alocado[cliente][r] -= pedido[r];
+            necessidade[cliente][r] += pedido[r];
+        }
+        printf("The customer %d request %s was denied because result in an unsafe state\n", cliente, str_pedido);
+    }
+}
+
+void tratar_release(int cliente, int *libera) {
+    char str_libera[256];
+    formatar_vetor(libera, str_libera);
+
+    for (int r = 0; r < total_recursos; r++) {
+        if (libera[r] > alocado[cliente][r]) {
+            printf("The customer %d cannot release %s because exceed its allocation\n", cliente, str_libera);
+            return;
+        }
+    }
+
+    for (int r = 0; r < total_recursos; r++) {
+        alocado[cliente][r] -= libera[r];
+        disponivel[r] += libera[r];
+        necessidade[cliente][r] += libera[r];
+    }
+
+    printf("Release from customer %d the resources %s\n", cliente, str_libera);
+}
+
 int main(int argc, char *argv[]) {
     if (argc < 2) {
         fprintf(stderr, "Uso: %s <r0> <r1> ...\n", argv[0]);
@@ -166,8 +250,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    printf("Estado inicial seguro? %s\n", verificar_seguranca() ? "SIM" : "NAO");
-
+    imprimir_estado();
     limpar_tudo();
     return 0;
 }
