@@ -1,22 +1,92 @@
 Script started on 2026-11-14 13:12:13-03:00 [TERM="xterm-256color" TTY="/dev/pts/6" COLUMNS="139" LINES="11"]
 [?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ [7mwhoami[27m
-[7mpwd[27m
-[7mdate[27m
-[7mmake[27m
-[7m./banker[27m
-[7mmake clean[27m[A[A[A[A[A]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ whoami
-pwd
-date
-make
-./banker
-make clean
-[?2004lrafaelborba
+
+[7mpwd[27m
+
+[7mdate[27m
+
+[7mmake[27m
+
+[7m./banker[27m
+
+[7mmake clean[27m[A[A[A[A[A
+]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ whoami
+
+pwd
+
+date
+
+make
+
+./banker
+
+make clean
+[?2004l
+rafaelborba
 /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb
 Sat Nov 14 13:12:24 -03 2026
 make: *** No rule to make target 'banker.c', needed by 'banker'.  Stop.
 bash: ./banker: No such file or directory
 rm -f banker *.o result.txt
 [?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ exit
-[?2004lexit
+[?2004l
+exit
 
 Script done on 2026-11-14 13:13:35-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-11-16 18:33:46-03:00 [TERM="xterm-256color" TTY="/dev/pts/6" COLUMNS="139" LINES="11"]
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ [7mwhoami && pwd && date[27m
+[7mmake[27m
+[7mexit[27m[A[A]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ whoami && pwd && date
+make
+exit
+[?2004lrafaelborba
+/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb
+Mon Nov 16 18:34:21 -03 2026
+gcc -Wall -Wextra -g banker.c -o banker
+[01m[Kbanker.c:[m[K In function ‘[01m[Kprocessar_comandos[m[K’:
+[01m[Kbanker.c:313:17:[m[K [01;31m[Kerror: [m[Ktoo few arguments to function ‘[01m[Ktratar_request[m[K’
+  313 |                 [01;31m[Ktratar_request[m[K(cliente, valores); // ERRO PROPOSITAL: faltou passar 'saida'
+      |                 [01;31m[K^~~~~~~~~~~~~~[m[K
+[01m[Kbanker.c:180:6:[m[K [01;36m[Knote: [m[Kdeclared here
+  180 | void [01;36m[Ktratar_request[m[K(int cliente, int *pedido, FILE *saida) {
+      |      [01;36m[K^~~~~~~~~~~~~~[m[K
+[01m[Kbanker.c:315:17:[m[K [01;31m[Kerror: [m[Ktoo few arguments to function ‘[01m[Ktratar_release[m[K’
+  315 |                 [01;31m[Ktratar_release[m[K(cliente, valores); // ERRO PROPOSITAL: faltou passar 'saida'
+      |                 [01;31m[K^~~~~~~~~~~~~~[m[K
+[01m[Kbanker.c:232:6:[m[K [01;36m[Knote: [m[Kdeclared here
+  232 | void [01;36m[Ktratar_release[m[K(int cliente, int *libera, FILE *saida) {
+      |      [01;36m[K^~~~~~~~~~~~~~[m[K
+make: *** [makefile:8: banker] Error 1
+exit
+
+Script done on 2026-11-16 18:34:21-03:00 [COMMAND_EXIT_CODE="2"]
+Script started on 2026-11-16 18:40:31-03:00 [TERM="xterm-256color" TTY="/dev/pts/6" COLUMNS="139" LINES="11"]
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ [7mscript -a evidencias.log[27m[1Pscript -a evidencias.lo[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[7mwhoami && pwd && date[27m
+[7mmake && ./banker 10 5 7[27m
+[7mexit[27m[A[A]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ whoami && pwd && date
+make && ./banker 10 5 7
+exit
+[?2004lrafaelborba
+/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb
+Mon Nov 16 18:40:42 -03 2026
+gcc -Wall -Wextra -g banker.c -o banker
+Allocate to customer 0 the resources 0 2 1
+Allocate to customer 2 the resources 3 0 2
+Allocate to customer 1 the resources 2 0 0
+Allocate to customer 4 the resources 0 0 2
+Release from customer 0 the resources 0 1 1
+Allocate to customer 3 the resources 2 1 1
+MAXIMUM   |   ALLOCATION  |   NEED
+7 5 3     |   0 1 0       |   7 4 3 
+3 2 2     |   2 0 0       |   1 2 2 
+9 0 2     |   3 0 2       |   6 0 0 
+2 2 2     |   2 1 1       |   0 1 1 
+4 3 3     |   0 0 2       |   4 3 1 
+AVAILABLE 3 3 2 
+The resources 3 3 2 are not enough to customer 4 request 4 0 0 
+Allocate to customer 1 the resources 1 0 2
+The customer 0 request 0 2 0 was denied because result in an unsafe state
+The customer 2 request 0 1 0 was denied because exceed its maximum allocation
+exit
+
+Script done on 2026-11-16 18:40:43-03:00 [COMMAND_EXIT_CODE="0"]

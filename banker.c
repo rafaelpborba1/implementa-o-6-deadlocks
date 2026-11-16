@@ -181,7 +181,18 @@ void tratar_request(int cliente, int *pedido, FILE *saida) {
     char str_pedido[256], str_disp[256];
     formatar_vetor(pedido, str_pedido);
 
+    if (cliente < 0 || cliente >= total_clientes) {
+        fprintf(saida, "Invalid customer %d\n", cliente);
+        printf("Invalid customer %d\n", cliente);
+        return;
+    }
+
     for (int r = 0; r < total_recursos; r++) {
+        if (pedido[r] < 0) {
+            fprintf(saida, "Invalid negative resource request\n");
+            printf("Invalid negative resource request\n");
+            return;
+        }
         if (pedido[r] > necessidade[cliente][r]) {
             fprintf(saida, "The customer %d request %s was denied because exceed its maximum allocation\n", cliente, str_pedido);
             printf("The customer %d request %s was denied because exceed its maximum allocation\n", cliente, str_pedido);
@@ -222,8 +233,14 @@ void tratar_release(int cliente, int *libera, FILE *saida) {
     char str_libera[256];
     formatar_vetor(libera, str_libera);
 
+    if (cliente < 0 || cliente >= total_clientes) {
+        fprintf(saida, "Invalid customer %d\n", cliente);
+        printf("Invalid customer %d\n", cliente);
+        return;
+    }
+
     for (int r = 0; r < total_recursos; r++) {
-        if (libera[r] > alocado[cliente][r]) {
+        if (libera[r] < 0 || libera[r] > alocado[cliente][r]) {
             fprintf(saida, "The customer %d cannot release %s because exceed its allocation\n", cliente, str_libera);
             printf("The customer %d cannot release %s because exceed its allocation\n", cliente, str_libera);
             return;
@@ -262,11 +279,34 @@ int processar_comandos() {
         if (!op) continue;
 
         if (strcmp(op, "*") == 0) {
+            if (strtok(NULL, " \t\r\n") != NULL) {
+                fprintf(stderr, "Parametros invalidos no comando *\n");
+                continue;
+            }
             imprimir_estado(saida);
         } else if (strcmp(op, "RQ") == 0 || strcmp(op, "RL") == 0) {
-            int cliente = atoi(strtok(NULL, " \t\r\n"));
-            for (int r = 0; r < total_recursos; r++) {
-                valores[r] = atoi(strtok(NULL, " \t\r\n"));
+            char *tok_cli = strtok(NULL, " \t\r\n");
+            int cliente;
+            char sobra;
+            if (!tok_cli || sscanf(tok_cli, "%d%c", &cliente, &sobra) != 1) {
+                fprintf(stderr, "Cliente invalido no comando %s\n", op);
+                continue;
+            }
+
+            int r = 0;
+            int valido = 1;
+            while (r < total_recursos) {
+                char *tok_val = strtok(NULL, " \t\r\n");
+                if (!tok_val || sscanf(tok_val, "%d%c", &valores[r], &sobra) != 1) {
+                    valido = 0;
+                    break;
+                }
+                r++;
+            }
+
+            if (!valido || strtok(NULL, " \t\r\n") != NULL) {
+                fprintf(stderr, "Parametros invalidos no comando %s\n", op);
+                continue;
             }
 
             if (strcmp(op, "RQ") == 0) {
@@ -274,6 +314,8 @@ int processar_comandos() {
             } else {
                 tratar_release(cliente, valores, saida);
             }
+        } else {
+            fprintf(stderr, "Comando desconhecido: %s\n", op);
         }
     }
 
