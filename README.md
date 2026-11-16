@@ -9,10 +9,10 @@
 ## Descrição dos Arquivos
 
 - `banker.c`: Arquivo principal contendo:
-  - Leitura e validação de `customer.txt` e `commands.txt` (`RQ`, `RL` e `*`).
+  - Leitura e validação de customer.txt e commands.txt (RQ, RL e *).
   - Verificação de estado seguro
-  - Alocação, liberação de recursos, exibição das matrizes e geração de `result.txt`.
-- `makefile`: Automação da compilação com `gcc`.
+  - Alocação, liberação de recursos, exibição das matrizes e geração de result.txt.
+- `makefile`: Automação da compilação
 - `evidencias.log`: Registro das sessões de compilação e execução dos testes.
 
 ## Como Compilar
