@@ -90,3 +90,35 @@ The customer 2 request 0 1 0 was denied because exceed its maximum allocation
 exit
 
 Script done on 2026-11-16 18:40:43-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-11-16 20:57:54-03:00 [TERM="xterm-256color" TTY="/dev/pts/9" COLUMNS="139" LINES="11"]
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ make
+[?2004lmake: Nothing to be done for 'all'.
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ makr[Ke clean
+[?2004lrm -f banker *.o result.txt
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ make
+[?2004lgcc -Wall -Wextra -g banker.c -o banker
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ make
+
+rm -f customer.txt commands.txt result.txt
+
+echo "=== NOVO TESTE 1: Execucao sem customer.txt no diretorio ==="
+./banker 8 4 6
+
+[7mcat << 'EOF' > customer.txt[27m
+[7m4,2[27m
+[7m3,5[27m
+[7mEOF[27m[7mecho "=== NOVO TESTE 2: Valor negativo com 2 recursos na CLI ==="[27m[7m./banker 8 -2[27m[7mecho "=== NOVO TESTE 3: Argumento com letras misturadas na CLI ==="[27m[7m./banker 8 4x[27m[A[A[Acat << 'EOF' > customer.txt
+4,2
+3,5
+EOFecho "=== NOVO TESTE 2: Valor negativo com 2 recursos na CLI ==="./banker 8 -2echo "=== NOVO TESTE 3: Argumento com letras misturadas na CLI ==="./banker 8 4x
+[?2004lmake: Nothing to be done for 'all'.
+=== NOVO TESTE 1: Execucao sem customer.txt no diretorio ===
+Erro ao abrir customer.txt
+=== NOVO TESTE 2: Valor negativo com 2 recursos na CLI ===
+Argumento invalido: -2
+=== NOVO TESTE 3: Argumento com letras misturadas na CLI ===
+Argumento invalido: 4x
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ exit
+[?2004lexit
+
+Script done on 2026-11-16 20:59:01-03:00 [COMMAND_EXIT_CODE="1"]
