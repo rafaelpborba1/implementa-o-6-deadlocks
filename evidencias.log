@@ -165,3 +165,45 @@ AVAILABLE 8 9 6 6
 [?2004lexit
 
 Script done on 2026-11-16 21:22:10-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-11-16 21:29:55-03:00 [TERM="xterm-256color" TTY="/dev/pts/10" COLUMNS="139" LINES="11"]
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ make
+[?2004lgcc -Wall -Wextra -g banker.c -o banker
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ cat << 'EOF' > customer.txt
+5,2
+2,4
+4,3
+1,2
+EOF
+
+echo "=== NOVO TESTE 7: 2 recursos - Bloqueio de estado inseguro (evitando deadlock) ==="
+cat << 'EOF' > commands.txt
+RQ 0 3 1
+RQ 1 1 3
+RQ 2 2 1RQ 3 1 1*EOF./banker 7 6[7mecho "=== NOVO TESTE 8: 2 recursos - Liberacao que destrava estado antes inseguro ==="[27m[7mcat << 'EOF' > commands.txt[27m[7mRQ 0 3 1[27m[7mRQ 1 1 3[27m[7mRQ 2 2 1[27m[7mRL 1 0 2[27m[7mRQ 2 2 1[27m[7m*[27m[7mEOF[27m[7m./banker 7 6[27mecho "=== NOVO TESTE 8: 2 recursos - Liberacao que destrava estado antes inseguro ==="cat << 'EOF' > commands.txtRQ 0 3 1RQ 1 1 3RQ 2 2 1RL 1 0 2RQ 2 2 1*EOF./banker 7 6
+[?2004l=== NOVO TESTE 7: 2 recursos - Bloqueio de estado inseguro (evitando deadlock) ===
+Allocate to customer 0 the resources 3 1
+Allocate to customer 1 the resources 1 3
+Allocate to customer 2 the resources 2 1
+The customer 3 request 1 1 was denied because result in an unsafe state
+MAXIMUM   |   ALLOCATION  |   NEED
+5 2       |   3 1         |   2 1 
+2 4       |   1 3         |   1 1 
+4 3       |   2 1         |   2 2 
+1 2       |   0 0         |   1 2 
+AVAILABLE 1 1 
+=== NOVO TESTE 8: 2 recursos - Liberacao que destrava estado antes inseguro ===
+Allocate to customer 0 the resources 3 1
+Allocate to customer 1 the resources 1 3
+Allocate to customer 2 the resources 2 1
+Release from customer 1 the resources 0 2
+The resources 1 3 are not enough to customer 2 request 2 1 
+MAXIMUM   |   ALLOCATION  |   NEED
+5 2       |   3 1         |   2 1 
+2 4       |   1 1         |   1 3 
+4 3       |   2 1         |   2 2 
+1 2       |   0 0         |   1 2 
+AVAILABLE 1 3 
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ ezi[K[Kxit
+[?2004lexit
+
+Script done on 2026-11-16 21:34:03-03:00 [COMMAND_EXIT_CODE="0"]
