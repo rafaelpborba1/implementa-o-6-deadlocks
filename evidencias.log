@@ -122,3 +122,46 @@ Argumento invalido: 4x
 [?2004lexit
 
 Script done on 2026-11-16 20:59:01-03:00 [COMMAND_EXIT_CODE="1"]
+Script started on 2026-11-16 21:22:00-03:00 [TERM="xterm-256color" TTY="/dev/pts/10" COLUMNS="139" LINES="11"]
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ make
+[?2004lgcc -Wall -Wextra -g banker.c -o banker
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ cat << 'EOF' > customer.txt
+6,4,3,2
+2,5,1,4
+3,3,4,1
+EOF
+
+echo "=== NOVO TESTE 4: 4 recursos - Alocacao e inspecao de matrizes ==="
+cat << 'EOF' > commands.txt
+RQ 0 2 1 1 0
+RQ 1 1 2 0 2
+*
+EOF./banker 8 9 6 6echo "=== NOVO TESTE 5: 4 recursos - Liberacao parcial e nova requisicao ==="cat << 'EOF' > commands.txtRQ 2 3 3 4 1RL 2 1 2 2 0[7mRQ 0 3 2 2 1[27m[7m*[27m[7mEOF[27m[7m./banker 8 9 6 6[27m[7mecho "=== NOVO TESTE 6: 4 recursos - Pedido acima da demanda maxima do cliente ==="[27m[7mcat << 'EOF' > commands.txt[27m[7mRQ 1 2 6 1 4[27m[7m*[27m[7mEOF[27m[7m./banker 8 9 6 6[27mRQ 0 3 2 2 1*EOF./banker 8 9 6 6echo "=== NOVO TESTE 6: 4 recursos - Pedido acima da demanda maxima do cliente ==="cat << 'EOF' > commands.txtRQ 1 2 6 1 4*EOF./banker 8 9 6 6
+[?2004l=== NOVO TESTE 4: 4 recursos - Alocacao e inspecao de matrizes ===
+Allocate to customer 0 the resources 2 1 1 0
+Allocate to customer 1 the resources 1 2 0 2
+MAXIMUM   |   ALLOCATION  |   NEED
+6 4 3 2   |   2 1 1 0     |   4 3 2 2 
+2 5 1 4   |   1 2 0 2     |   1 3 1 2 
+3 3 4 1   |   0 0 0 0     |   3 3 4 1 
+AVAILABLE 5 6 5 4 
+=== NOVO TESTE 5: 4 recursos - Liberacao parcial e nova requisicao ===
+Allocate to customer 2 the resources 3 3 4 1
+Release from customer 2 the resources 1 2 2 0
+Allocate to customer 0 the resources 3 2 2 1
+MAXIMUM   |   ALLOCATION  |   NEED
+6 4 3 2   |   3 2 2 1     |   3 2 1 1 
+2 5 1 4   |   0 0 0 0     |   2 5 1 4 
+3 3 4 1   |   2 1 2 1     |   1 2 2 0 
+AVAILABLE 3 6 2 4 
+=== NOVO TESTE 6: 4 recursos - Pedido acima da demanda maxima do cliente ===
+The customer 1 request 2 6 1 4 was denied because exceed its maximum allocation
+MAXIMUM   |   ALLOCATION  |   NEED
+6 4 3 2   |   0 0 0 0     |   6 4 3 2 
+2 5 1 4   |   0 0 0 0     |   2 5 1 4 
+3 3 4 1   |   0 0 0 0     |   3 3 4 1 
+AVAILABLE 8 9 6 6 
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ exit
+[?2004lexit
+
+Script done on 2026-11-16 21:22:10-03:00 [COMMAND_EXIT_CODE="0"]
