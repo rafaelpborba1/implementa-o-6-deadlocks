@@ -207,3 +207,37 @@ AVAILABLE 1 3
 [?2004lexit
 
 Script done on 2026-11-16 21:34:03-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-11-16 21:39:31-03:00 [TERM="xterm-256color" TTY="/dev/pts/10" COLUMNS="139" LINES="11"]
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ make clean
+[?2004lrm -f banker *.o result.txt
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ make
+[?2004lgcc -Wall -Wextra -g banker.c -o banker
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ echo "=== NOVO TESTE 9: Cliente unico usando 100% dos recursos do sistema ===" 
+cat << 'EOF' > customer.txt
+12,8,5
+EOF
+cat << 'EOF' > commands.txt
+RQ 0 12 8 5
+*
+[7mRL 0 12 8 5[27m
+[7m*[27m
+[7mEOF[27m
+[7m./banker 12 8 5[27m[7mecho "=== NOVO TESTE 10: customer.txt vazio e comandos invalidos ==="[27m[7m: > customer.txt[27m[7mcat << 'EOF' > commands.txt[27m[7mRQ 0 1 1 1[27m[7mEOF[27m[7m./banker 5 5 5[27m[A[A[ARL 0 12 8 5
+*
+EOF
+./banker 12 8 5echo "=== NOVO TESTE 10: customer.txt vazio e comandos invalidos ===": > customer.txtcat << 'EOF' > commands.txtRQ 0 1 1 1EOF./banker 5 5 5
+[?2004l=== NOVO TESTE 9: Cliente unico usando 100% dos recursos do sistema ===
+Allocate to customer 0 the resources 12 8 5
+MAXIMUM   |   ALLOCATION  |   NEED
+12 8 5    |   12 8 5      |   0 0 0 
+AVAILABLE 0 0 0 
+Release from customer 0 the resources 12 8 5
+MAXIMUM   |   ALLOCATION  |   NEED
+12 8 5    |   0 0 0       |   12 8 5 
+AVAILABLE 12 8 5 
+=== NOVO TESTE 10: customer.txt vazio e comandos invalidos ===
+Arquivo customer.txt vazio
+[?2004h]0;rafaelborba@LAPTOP-1NHA1UCQ: /mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[01;32mrafaelborba@LAPTOP-1NHA1UCQ[00m:[01;34m/mnt/c/Users/rafap/OneDrive/Área de Trabalho/rpb[00m$ exit
+[?2004lexit
+
+Script done on 2026-11-16 21:41:40-03:00 [COMMAND_EXIT_CODE="1"]
